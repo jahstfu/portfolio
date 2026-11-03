@@ -1,0 +1,28 @@
+@import "tailwindcss";
+ 
+/* Minimal base only. The Vite starter styles (#root width cap, text-align:center,
+   side borders, h1/h2 colors, light bg) were removed because they fought the layout. */
+html {
+  background: #000;
+  color-scheme: dark;
+  -webkit-text-size-adjust: 100%;
+}
+ 
+body {
+  margin: 0;
+  background: #000;
+  color: #fff;
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+ 
+#root {
+  min-height: 100svh;
+}
+ 
+img,
+svg {
+  max-width: 100%;
+}
