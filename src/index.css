@@ -1,5 +1,5 @@
+@import url("https://googleapis.com");
 @import "tailwindcss";
- 
 /* Minimal base only. The Vite starter styles (#root width cap, text-align:center,
    side borders, h1/h2 colors, light bg) were removed because they fought the layout. */
 html {
