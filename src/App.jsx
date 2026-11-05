@@ -28,9 +28,9 @@ import {
   FastForward
 } from 'lucide-react';
 
-const BarongPortraitSVG = () => (
+const barongPortrait = () => (
     <img
-    src=".\src\public\assets\intro\barong-cutout.png"
+    src="\assets\intro\barong-cutout.png"
     alt="Portrait of Jah in a barong tagalog"
     className="w-48 h-52 sm:w-56 sm:h-60 mx-auto object-contain drop-shadow-[0_4px_20px_rgba(255,255,255,0.12)] select-none"
     draggable={false}
@@ -112,145 +112,6 @@ const JahBlockLogoSVG = ({ className = "w-56 sm:w-72 h-auto" }) => (
     </g>
   </svg>
 );
-
-const AJBoneSpiderSVG = ({ scrollProgress = 0, activePulse = false }) => {
-  const phase = scrollProgress * Math.PI * 10;
-  const swing = Math.sin(phase) * 6;
-
-  const bobY = Math.sin(phase * 0.1) * 150;
-  const tilt = Math.cos(phase * 0.1) * 40;
-
-  const step = (i, side) =>
-    Math.cos(phase + i * (Math.PI / 2) + (side === "r" ? Math.PI : 0)) * 6;
-  const l1 = step(0, "l"), l2 = step(1, "l"), l3 = step(2, "l"), l4 = step(3, "l");
-  const r1 = step(0, "r"), r2 = step(1, "r"), r3 = step(2, "r"), r4 = step(3, "r");
-
-  const renderBone = (x1, y1, x2, y2, thickness = 11, key) => {
-    const angle = Math.atan2(y2 - y1, x2 - x1) * (180 / Math.PI);
-    const length = Math.hypot(x2 - x1, y2 - y1);
-    return (
-      <g key={key} transform={`translate(${x1}, ${y1}) rotate(${angle})`}>
-        <rect
-          x={0}
-          y={-thickness / 2}
-          width={length}
-          height={thickness}
-          rx={thickness / 2}
-          fill="#3b0a26"
-          stroke="#590d38"
-          strokeWidth="1.5"
-        />
-        <circle cx={0} cy={-thickness * 0.55} r={thickness * 0.65} fill="#3b0a26" stroke="#590d38" strokeWidth="1.2" />
-        <circle cx={0} cy={thickness * 0.55} r={thickness * 0.65} fill="#3b0a26" stroke="#590d38" strokeWidth="1.2" />
-        <circle cx={length} cy={-thickness * 0.55} r={thickness * 0.65} fill="#3b0a26" stroke="#590d38" strokeWidth="1.2" />
-        <circle cx={length} cy={thickness * 0.55} r={thickness * 0.65} fill="#3b0a26" stroke="#590d38" strokeWidth="1.2" />
-      </g>
-    );
-  };
-
-  return (
-    <svg
-      viewBox="0 0 500 720"
-      className="w-full h-full overflow-visible select-none pointer-events-none filter drop-shadow-[0_0_25px_rgba(233,62,143,0.18)]"
-    >
-      <g transform={`translate(0, ${bobY}) rotate(${tilt}, 250, 350)`}>
-        <g transform={`rotate(${swing * 0.5}, 230, 350)`}>
-          {renderBone(195, 290, 145, 210 - l1, 12, 'l1-a')}
-          {renderBone(145, 210 - l1, 215, 75, 11, 'l1-b')}
-          <polygon points="212,72 222,78 235,25" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(178, 325, 85, 285 + l2, 12, 'l2-a')}
-          {renderBone(85, 285 + l2, 140, 145, 10, 'l2-b')}
-          <polygon points="135,145 146,148 168,95" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(180, 365, 88, 398 - l3, 12, 'l3-a')}
-          {renderBone(88, 398 - l3, 145, 525, 10, 'l3-b')}
-          <polygon points="140,523 152,520 185,595" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(198, 395, 152, 495 + l4, 12, 'l4-a')}
-          {renderBone(152, 495 + l4, 215, 625, 11, 'l4-b')}
-          <polygon points="210,622 222,618 238,685" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-        </g>
-
-        <g transform={`rotate(${-swing * 0.5}, 270, 350)`}>
-          {renderBone(305, 290, 355, 210 + r1, 12, 'r1-a')}
-          {renderBone(355, 210 + r1, 285, 75, 11, 'r1-b')}
-          <polygon points="288,72 278,78 265,25" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(322, 325, 415, 285 - r2, 12, 'r2-a')}
-          {renderBone(415, 285 - r2, 360, 145, 10, 'r2-b')}
-          <polygon points="365,145 354,148 332,95" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(320, 365, 412, 398 + r3, 12, 'r3-a')}
-          {renderBone(412, 398 + r3, 355, 525, 10, 'r3-b')}
-          <polygon points="360,523 348,520 315,595" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-
-          {renderBone(302, 395, 348, 495 - r4, 12, 'r4-a')}
-          {renderBone(348, 495 - r4, 285, 625, 11, 'r4-b')}
-          <polygon points="290,622 278,618 262,685" fill="#3b0a26" stroke="#590d38" strokeWidth="1.5" />
-        </g>
-
-        <path
-          d="M 218 292 Q 205 255 235 242 Q 225 268 232 288 Z"
-          fill="#3b0a26"
-          stroke="#7a114d"
-          strokeWidth="2"
-        />
-        <path
-          d="M 282 292 Q 295 255 265 242 Q 275 268 268 288 Z"
-          fill="#3b0a26"
-          stroke="#7a114d"
-          strokeWidth="2"
-        />
-
-        <g
-          transform={`scale(${activePulse ? 1.06 : 1})`}
-          style={{ transformOrigin: '250px 350px', transition: 'transform 0.3s ease' }}
-        >
-          <path
-            d="M 250 312
-               C 232 278, 175 285, 182 338
-               C 188 378, 235 408, 250 432
-               C 265 408, 312 378, 318 338
-               C 325 285, 268 278, 250 312 Z"
-            fill="#070707"
-            stroke="#4a0c30"
-            strokeWidth="12"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M 250 312
-               C 232 278, 175 285, 182 338
-               C 188 378, 235 408, 250 432
-               C 265 408, 312 378, 318 338
-               C 325 285, 268 278, 250 312 Z"
-            fill="none"
-            stroke="#e93e8f"
-            strokeWidth="2"
-            opacity="0.45"
-          />
-
-          <path
-            d="M 202 318 L 288 342 L 195 348 L 295 362 L 208 372 L 282 380 L 222 392 L 268 398 L 238 412 L 265 315 L 205 335 L 285 325 L 215 360 L 275 350"
-            fill="none"
-            stroke="#464648"
-            strokeWidth="9"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-          <path
-            d="M 208 322 L 282 346 L 202 354 L 288 366 L 218 378 L 274 385 L 235 402"
-            fill="none"
-            stroke="#68686b"
-            strokeWidth="3.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </g>
-      </g>
-    </svg>
-  );
-};
 
 const UndertaleSoulSVG = ({ color = "#e93e8f", className = "w-4 h-4" }) => (
   <svg viewBox="0 0 16 16" className={`${className} inline-block shrink-0`} style={{ shapeRendering: 'crispEdges' }}>
@@ -437,7 +298,7 @@ const EVENTS_DATA = [
   {
     id: "exec-workshop",
     date: "2026",
-    placeholderPath: ".\\src\\public\\assets\\events\\exec-workshop.jpg",
+    placeholderPath: "/assets/events/exec-workshop.jpg",
     resolution: "16:9 • Event Photo",
     title: "AWS Skill Builder Execution Workshop",
     role: "Attendee",
@@ -449,7 +310,7 @@ const EVENTS_DATA = [
   {
     id: "scd-mega-manila-2026",
     date: "2026",
-    placeholderPath: ".\\src\\public\\assets\\events\\scd-mega-manila-2026.jpg",
+    placeholderPath: "/assets/events/scd-mega-manila-2026.jpg",
     resolution: "16:9 • Event Photo",
     title: "AWS Student Community Day Mega Manila 2026",
     role: "Official Volunteer Photographer",
@@ -461,7 +322,7 @@ const EVENTS_DATA = [
   {
     id: "arduino-2026",
     date: "2026",
-    placeholderPath: ".\\src\\public\\assets\\events\\arduino-2026.jpg",
+    placeholderPath: "/assets/events/arduino-2026.jpg",
     resolution: "16:9 • Event Photo",
     title: "Arduino Day Philippines 2026",
     role: "Attendee",
@@ -473,7 +334,7 @@ const EVENTS_DATA = [
   {
     id: "empowher",
     date: "2026",
-    placeholderPath: ".\\src\\public\\assets\\events\\empowher.jpg",
+    placeholderPath: "/assets/events/empowher.jpg",
     resolution: "16:9 • Event Photo",
     title: "EmpowHER: Sketching Visions, Building Futures",
     role: "Secretary and Attendee",
@@ -485,7 +346,7 @@ const EVENTS_DATA = [
   {
     id: "techex-ieee",
     date: "2025",
-    placeholderPath: ".\\src\\public\\assets\\events\\techex-ieee.jpg",
+    placeholderPath: "/assets/events/techex-ieee.jpg",
     resolution: "16:9 • Event Photo",
     title: "IEEE TechEx 2025: Engineering Solutions for Disaster Adversities",
     role: "Attendee",
@@ -497,7 +358,7 @@ const EVENTS_DATA = [
   {
     id: "kubernetes",
     date: "2025",
-    placeholderPath: ".\\src\\public\\assets\\events\\kubernetes.jpg",
+    placeholderPath: "/assets/events/kubernetes.jpg",
     resolution: "16:9 • Event Photo",
     title: "An introduction to Kubernetes",
     role: "Attendee",
@@ -543,7 +404,7 @@ export default function App() {
 
   const [scrollProgress, setScrollProgress] = useState(0);
   const [scrollY, setScrollY] = useState(0);
-  const [activeSection, setActiveSection] = useState("bionote");
+  const [activeSection, setActiveSection] = useState("home");
 
   const [useMockupTagline, setUseMockupTagline] = useState(true);
   const [activeSlideIndex, setActiveSlideIndex] = useState(0);
@@ -620,7 +481,7 @@ export default function App() {
 
   const INTRO_SCRIPT = [
     "* Hey! I'm Jah!",
-    "* Welcome to my portfolio!",
+    "* Welcome to my portfolio!"
   ];
 
   const triggerIntroExit = useCallback(() => {
@@ -726,7 +587,7 @@ export default function App() {
       setScrollY(currentY);
       setScrollProgress(progress);
 
-      const sectionIds = ["bionote", "how-i-work", "projects", "organizations", "events"];
+      const sectionIds = ["home", "how-i-work", "projects", "organizations", "events"];
       for (const id of sectionIds) {
         const el = document.getElementById(id);
         if (el) {
@@ -743,42 +604,6 @@ export default function App() {
     handleScroll();
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  const handlePortraitUpload = (e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomPortraitUrl(url);
-      playSaveSound();
-    }
-  };
-
-  const handleCarouselImageUpload = (slideId, e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomSlideImages((prev) => ({ ...prev, [slideId]: url }));
-      playSaveSound();
-    }
-  };
-
-  const handleProjectImageUpload = (projectId, e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomProjectImages((prev) => ({ ...prev, [projectId]: url }));
-      playSaveSound();
-    }
-  };
-
-  const handleEventImageUpload = (eventId, e) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      const url = URL.createObjectURL(file);
-      setCustomEventImages((prev) => ({ ...prev, [eventId]: url }));
-      playSaveSound();
-    }
-  };
 
   const renderLineWithGreenJah = (lineText) => {
     if (!lineText.includes("Jah")) return lineText;
@@ -865,7 +690,7 @@ export default function App() {
                   className="w-44 h-48 sm:w-52 sm:h-56 object-contain mx-auto select-none"
                 />
               ) : (
-                <BarongPortraitSVG />
+                <barongPortrait />
               )}
           </div>
 
@@ -892,49 +717,11 @@ export default function App() {
         </div>
       )}
 
-      <div
-        aria-hidden="true"
-        className="fixed inset-0 pointer-events-none z-0 overflow-hidden opacity-75 sm:opacity-95 transition-opacity"
-      >
-        <div
-          className="absolute left-0 top-1/2 -translate-y-1/2 h-[2px] bg-gradient-to-r from-[#3b0a26] via-[#e93e8f]/75 to-[#ff0055] shadow-[0_0_12px_rgba(233,62,143,0.6)]"
-          style={{
-            width: `calc(${2 + scrollProgress * 80}vw + 180px)`,
-            transition: "width 0.08s linear"
-          }}
-        />
-
-        <div
-          className="absolute left-0 top-[48%] h-[1px] bg-gradient-to-r from-transparent via-[#590d38]/60 to-[#e93e8f]/40"
-          style={{
-            width: `calc(${2 + scrollProgress * 80}vw + 140px)`,
-            transition: "width 0.08s linear"
-          }}
-        />
-
-        <div
-          className="absolute top-1/2 left-0 w-[320px] sm:w-[420px] lg:w-[480px] h-[460px] sm:h-[560px] -mt-[230px] sm:-mt-[280px] -ml-[60px] sm:-ml-[80px] flex items-center justify-center"
-          style={{
-            transform: `translate3d(${2 + scrollProgress * 80}vw, ${
-              Math.sin(scrollProgress * Math.PI * 12) * 14
-            }px, 0) rotate(${
-              90 + Math.cos(scrollProgress * Math.PI * 12) * 6
-            }deg)`,
-            transition: "transform 0.08s linear"
-          }}
-        >
-          <AJBoneSpiderSVG
-            scrollProgress={scrollProgress * 2.2}
-            activePulse={scrollY % 450 < 120}
-          />
-        </div>
-      </div>
-
       <header className="sticky top-0 z-40 bg-black/90 backdrop-blur-md border-b-2 border-white/90 px-4 py-3">
         <div className="max-w-7xl mx-auto flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-3">
             <button
-              onClick={() => scrollToSection("bionote")}
+              onClick={() => scrollToSection("home")}
               className="flex items-center gap-2 group text-left"
             >
               <UndertaleSoulSVG color="#e93e8f" className="w-5 h-5 group-hover:scale-110 transition-transform" />
@@ -949,7 +736,7 @@ export default function App() {
 
           <nav className="flex flex-wrap items-center gap-1.5 sm:gap-2">
             {[
-              { id: "bionote", label: "BIONOTE" },
+              { id: "home", label: "HOME" },
               { id: "how-i-work", label: "HOW I WORK" },
               { id: "projects", label: "PROJECTS" },
               { id: "organizations", label: "ORGS" },
@@ -995,7 +782,7 @@ export default function App() {
 
       <main className="relative z-10 max-w-7xl mx-auto px-4 sm:px-8 pb-28">
         <section
-          id="bionote"
+          id="home"
           className="scroll-mt-24 min-h-[92vh] pt-10 pb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
         >
           <div className="hidden lg:flex lg:col-span-5 flex-col justify-end h-full pb-12 pointer-events-none">
@@ -1126,9 +913,6 @@ export default function App() {
                 <span className="px-2.5 py-1 bg-[#e93e8f] text-black font-pixel text-[10px]">
                   ACT // 02
                 </span>
-                <span className="font-pixel text-xs text-[#00ff00]">
-                  * ENGINEERING METHODOLOGY & GOVERNANCE WORKFLOW
-                </span>
               </div>
               <h2 className="font-pixel text-xl sm:text-2xl text-white">
                 HOW I WORK // BATTLE STRATEGY
@@ -1240,9 +1024,6 @@ export default function App() {
                 <span className="px-2.5 py-1 bg-[#ff0055] text-black font-pixel text-[10px]">
                   FIGHT // 03
                 </span>
-                <span className="font-pixel text-xs text-[#00ff00]">
-                  * SOFTWARE, COMPUTER VISION, OR & HARDWARE BUILDS
-                </span>
               </div>
               <h2 className="font-pixel text-xl sm:text-2xl text-white">
                 PROJECTS & TECHNICAL LABS
@@ -1303,9 +1084,6 @@ export default function App() {
               <div className="flex items-center gap-2.5 mb-2">
                 <span className="px-2.5 py-1 bg-[#e93e8f] text-black font-pixel text-[10px]">
                   ITEM // 04
-                </span>
-                <span className="font-pixel text-xs text-[#00ff00]">
-                  * EXECUTIVE LEADERSHIP & STUDENT GOVERNANCE
                 </span>
               </div>
               <h2 className="font-pixel text-xl sm:text-2xl text-white">
@@ -1372,9 +1150,6 @@ export default function App() {
               <div className="flex items-center gap-2.5 mb-2">
                 <span className="px-2.5 py-1 bg-[#ff0055] text-black font-pixel text-[10px]">
                   MERCY // 05
-                </span>
-                <span className="font-pixel text-xs text-[#00ff00]">
-                  * CONFERENCES, ASSEMBLIES & MILESTONE SAVE POINTS
                 </span>
               </div>
               <h2 className="font-pixel text-xl sm:text-2xl text-white">

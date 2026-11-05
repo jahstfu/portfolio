@@ -1,4 +1,3 @@
-@import url("https://googleapis.com");
 @import "tailwindcss";
 /* Minimal base only. The Vite starter styles (#root width cap, text-align:center,
    side borders, h1/h2 colors, light bg) were removed because they fought the layout. */
@@ -12,7 +11,7 @@ body {
   margin: 0;
   background: #000;
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: 'OpenSans', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
@@ -25,4 +24,39 @@ body {
 img,
 svg {
   max-width: 100%;
+}
+
+@font-face{
+  font-family: 'Determination';
+  src: url('/assets/fonts/Determination.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Electrolize';
+  src: url('/assets/fonts/Electrolize-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'Title';
+  src: url('/assets/fonts/MonsterFriendFor.otf') format('opentype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'OpenSans';
+  src: url('/assets/fonts/OpenSans-VariableFont_wdth,wght.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face{
+  font-family: 'UbuntuMono';
+  src: url('/assets/fonts/UbuntuMono-Regular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
 }
