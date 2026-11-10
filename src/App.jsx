@@ -637,7 +637,7 @@ export default function App() {
           font-family: 'VT323', monospace;
         }
         .font-sans-clean {
-          font-family: 'Inter', sans-serif;
+          font-family: 'Inter', monospace;
         }
 
         .undertale-mockup-box {
@@ -761,15 +761,6 @@ export default function App() {
             })}
 
             <button
-              onClick={handleReplayIntro}
-              title="Replay Undertale Barong Greeting"
-              className="px-2.5 py-1.5 border-2 border-[#00ff00] bg-black text-[#00ff00] hover:bg-[#00ff00] hover:text-black font-pixel text-[9px] sm:text-[10px] flex items-center gap-1 transition-colors ml-1"
-            >
-              <RotateCcw className="w-3 h-3" />
-              <span className="hidden sm:inline">INTRO</span>
-            </button>
-
-            <button
               onClick={() => setSoundEnabled(!soundEnabled)}
               title="Toggle 8-Bit Sound Effects"
               className="p-1.5 border-2 border-zinc-600 hover:border-[#e93e8f] text-zinc-300 hover:text-[#e93e8f] transition-colors"
@@ -785,14 +776,9 @@ export default function App() {
           id="home"
           className="scroll-mt-24 min-h-[92vh] pt-10 pb-20 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center"
         >
-          <div className="hidden lg:flex lg:col-span-5 flex-col justify-end h-full pb-12 pointer-events-none">
-            <div className="bg-black/80 border-l-4 border-[#e93e8f] pl-4 py-2 max-w-xs">
-              <p className="font-pixel text-[10px] text-[#e93e8f] uppercase">
-                * LOVE BITES // BLACK WIDOW
-              </p>
-              <p className="font-vt text-lg text-zinc-400">
-                Scroll down to watch the skeletal spider crawl horizontally from left to right across the screen.
-              </p>
+          <div className="hidden lg:flex lg:col-span-5 flex-col justify-end h-max pb-100 pointer-events-none">
+            <div className="w-full h-full relative">
+              <img src="\assets\intro\barong-cutout.png" alt="EmpowHER: Sketching Visions, Building Futures" className="w-full h-auto object-cover" />
             </div>
           </div>
 
