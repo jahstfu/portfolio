@@ -401,18 +401,6 @@ export default function App() {
   }, []);
 
   useEffect(() => {
-    if (!lightbox) return;
-    const onKey = (e) => e.key === "Escape" && setLightbox(null);
-    const prevOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
-    window.addEventListener("keydown", onKey);
-    return () => {
-      window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
-    };
-  }, [lightbox]);
-
-  useEffect(() => {
     if (!lightbox && !showResume) return;
     const onKey = (e) => {
       if (e.key === "Escape") {
@@ -420,12 +408,11 @@ export default function App() {
         setShowResume(false);
       }
     };
-    const prevOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
     window.addEventListener("keydown", onKey);
     return () => {
       window.removeEventListener("keydown", onKey);
-      document.body.style.overflow = prevOverflow;
+      document.body.style.overflow = "";
     };
   }, [lightbox, showResume]);
 
