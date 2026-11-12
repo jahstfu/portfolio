@@ -78,7 +78,7 @@ const SPECIALITIES_PILLARS = [
   },
   {
     id: "management",
-    code: "CHAPTER 06",
+    code: "CHAPTER 05",
     title: "ClickUp Project Manager",
     stat: "ATK 96 // DEF 99",
     summary:
@@ -375,7 +375,7 @@ export default function App() {
         ch = 0;
         timer = setTimeout(step, 400);
       } else {
-        timer = setTimeout(leave, 2000);
+        timer = setTimeout(leave, 500 );
       }
     };
     timer = setTimeout(step, 300);
@@ -525,7 +525,7 @@ export default function App() {
           <button onClick={() => scrollToSection("home")} className="group flex shrink-0 items-center gap-2.5">
             <SoulIcon className="h-5 w-5 transition-transform group-hover:scale-110" />
             <span className="font-tech text-xl text-white">
-              JAH<span className="text-ut">.EXE</span>
+              JAH
             </span>
           </button>
           <nav className="flex min-w-0 items-center gap-1 overflow-x-auto">
@@ -566,7 +566,7 @@ export default function App() {
             <p className="font-tech text-2xl text-zinc-200 sm:text-3xl">Filled with Hopes and Dreams</p>
 
             <div className="card space-y-4 p-6 sm:p-8">
-              <p className="font-mono text-base text-ut">* BIONOTE // LV 99</p>
+              <p className="font-mono text-base text-ut">* BIONOTE // LV 19</p>
               <p className="font-dialog text-2xl leading-snug text-white sm:text-3xl">
                 <span className="text-brand">* </span>
                 Hey! I’m <span className="text-ut">Jah</span>—a Bachelor of Science in Information Technology (<span className="text-brand">BSIT</span>) student at the{" "}
