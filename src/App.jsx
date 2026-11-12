@@ -24,7 +24,7 @@ const SPECIALITIES_PILLARS = [
     id: "fundamentals",
     code: "CHAPTER 01",
     title: "Network Fundamentals",
-    stat: "ATK 94 // DEF 90",
+    stat: "ATK 94 | DEF 90",
     summary:
       "I build from the ground up: understanding how data moves across a network, layer by layer, before touching any device.",
     bullets: [
@@ -38,7 +38,7 @@ const SPECIALITIES_PILLARS = [
     id: "cisco-ios",
     code: "CHAPTER 02",
     title: "Cisco IOS Configuration",
-    stat: "ATK 92 // DEF 88",
+    stat: "ATK 92 | DEF 88",
     summary:
       "Hands-on lab practice with the Cisco IOS command line, from first boot to a saved and verified configuration.",
     bullets: [
@@ -52,7 +52,7 @@ const SPECIALITIES_PILLARS = [
     id: "switching-routing",
     code: "CHAPTER 03",
     title: "Switching & Routing Basics",
-    stat: "ATK 90 // DEF 91",
+    stat: "ATK 90 | DEF 91",
     summary:
       "Connecting devices into segmented, reliable networks and moving traffic between them.",
     bullets: [
@@ -66,7 +66,7 @@ const SPECIALITIES_PILLARS = [
     id: "services-security",
     code: "CHAPTER 04",
     title: "Network Services & Security",
-    stat: "ATK 89 // DEF 95",
+    stat: "ATK 89 | DEF 95",
     summary:
       "Keeping the network usable and protected with core services and least-privilege access.",
     bullets: [
@@ -80,7 +80,7 @@ const SPECIALITIES_PILLARS = [
     id: "management",
     code: "CHAPTER 05",
     title: "ClickUp Project Manager",
-    stat: "ATK 96 // DEF 99",
+    stat: "ATK 96 | DEF 99",
     summary:
       "ClickUp is a project management software company that provides an all-in-one platform to improve workplace efficiency and collaboration.",
     bullets: [
@@ -375,7 +375,7 @@ export default function App() {
         ch = 0;
         timer = setTimeout(step, 400);
       } else {
-        timer = setTimeout(leave, 500 );
+        timer = setTimeout(leave, 750);
       }
     };
     timer = setTimeout(step, 300);
@@ -431,12 +431,6 @@ export default function App() {
             introExiting ? "pointer-events-none -translate-y-6 opacity-0" : "translate-y-0 opacity-100"
           }`}
         >
-          <img
-            src="/assets/intro/barong-cutout.png"
-            alt="Portrait of Jah in a barong tagalog"
-            draggable={false}
-            className="mx-auto mb-6 h-48 w-44 select-none object-contain sm:h-56 sm:w-52"
-          />
           <div className="w-full max-w-2xl select-none rounded-xl bg-white p-2.5 shadow-[0_0_35px_rgba(255,255,255,0.14)]">
             <div className="min-h-[175px] space-y-4 rounded-lg bg-black px-6 py-6 font-dialog text-2xl leading-relaxed text-white sm:px-10 sm:py-8 sm:text-3xl">
               <p className="min-h-[1.6em]">
@@ -519,7 +513,6 @@ export default function App() {
 
       <SpiderCrawl />
 
-
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
           <button onClick={() => scrollToSection("home")} className="group flex shrink-0 items-center gap-2.5">
@@ -563,10 +556,9 @@ export default function App() {
               </h1>
               <p className="mt-4 font-dialog text-4xl text-ut sm:text-5xl">Jah</p>
             </div>
-            <p className="font-tech text-2xl text-zinc-200 sm:text-3xl">Filled with Hopes and Dreams</p>
 
             <div className="card space-y-4 p-6 sm:p-8">
-              <p className="font-mono text-base text-ut">* BIONOTE // LV 19</p>
+              <p className="font-mono text-base text-ut">* BIONOTE | LV 19</p>
               <p className="font-dialog text-2xl leading-snug text-white sm:text-3xl">
                 <span className="text-brand">* </span>
                 Hey! I’m <span className="text-ut">Jah</span>—a Bachelor of Science in Information Technology (<span className="text-brand">BSIT</span>) student at the{" "}
@@ -612,7 +604,7 @@ export default function App() {
           </div>
         </section>
 
-        <Section id="projects" code="FIGHT // 02" title="PROJECTS & TECHNICAL LABS">
+        <Section id="projects" code="FIGHT | 02" title="PROJECTS & TECHNICAL LABS">
           <div className="grid gap-6 md:grid-cols-2">
             {PROJECTS_DATA.map((p) => (
               <article key={p.id} className="card flex flex-col gap-4 p-6">
@@ -633,7 +625,7 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="specialities" code="ACT // 03" title="SPECIALITIES  // BATTLE STRATEGY">
+        <Section id="specialities" code="ACT | 03" title="SPECIALITIES  | BATTLE STRATEGY">
           <div className="grid items-stretch gap-6 lg:grid-cols-12">
             <div className="flex flex-col gap-3 lg:col-span-5">
               {SPECIALITIES_PILLARS.map((pillar, idx) => {
@@ -664,7 +656,7 @@ export default function App() {
               <div className="space-y-4">
                 <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
                   <span className="flex items-center gap-2.5 font-mono text-base text-brand">
-                    <ActiveIcon className="h-5 w-5" />* {activePillar.code} // INSPECTING WORKFLOW
+                    <ActiveIcon className="h-5 w-5" />* {activePillar.code} | INSPECTING WORKFLOW
                   </span>
                   <span className="chip text-ut">{activePillar.stat}</span>
                 </div>
@@ -690,7 +682,7 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="organizations" code="ITEM // 04" title="ORGANIZATIONS & AFFILIATIONS">
+        <Section id="organizations" code="ITEM | 04" title="ORGANIZATIONS & AFFILIATIONS">
           <div className="space-y-6">
             {ORGANIZATIONS_DATA.map((item) => (
               <div key={item.org} className="card border-l-4 p-6 sm:p-7" style={{ borderLeftColor: item.color }}>
@@ -698,7 +690,7 @@ export default function App() {
                   <div>
                     <div className="mb-2 flex flex-wrap items-center gap-3 font-mono text-sm">
                       <span className="chip" style={{ color: item.color, borderColor: item.color }}>{item.badge}</span>
-                      <span className="text-zinc-400">// {item.period}</span>
+                      <span className="text-zinc-400">| {item.period}</span>
                     </div>
                     <h3 className="font-tech text-xl text-white sm:text-2xl">{item.org}</h3>
                   </div>
@@ -720,7 +712,7 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="events" code="MERCY // 05" title="EVENTS ATTENDED & ORGANIZED">
+        <Section id="events" code="MERCY | 05" title="EVENTS ATTENDED & ORGANIZED">
           <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
             {EVENTS_DATA.map((ev) => {
               const isSaved = !!savedEvents[ev.id];
@@ -755,7 +747,7 @@ export default function App() {
           </div>
         </Section>
 
-        <Section id="contact" code="TALK // 06" title="CONTACT">
+        <Section id="contact" code="TALK | 06" title="CONTACT">
           <div className="grid gap-6 md:grid-cols-3">
             {CONTACTS.map(({ label, value, href, icon: Icon, external }) => (
               <a
