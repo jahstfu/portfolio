@@ -1,5 +1,5 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
-import { Volume2, VolumeX, MapPin, Network, Terminal, Server, ShieldCheck, Wrench, ClipboardList } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { MapPin, Network, Terminal, Server, ShieldCheck, ClipboardList } from 'lucide-react';
 
 const INTRO_SCRIPT = ["* Hey! I'm Jah!", "* Welcome to my portfolio!"];
 
@@ -126,65 +126,47 @@ const SPECIALITIES_PILLARS = [
 
 const PROJECTS_DATA = [
   {
-    id: "qr-access",
+    id: "enterprise-networking",
     encounter: "BOSS ENCOUNTER #01",
-    level: "LV 99 SECURITY SYS",
-    placeholderPath: "/assets/projects/qr-security.jpg",
+    level: "LV 99 NETWORKING BOSS",
+    placeholderPath: "/assets/projects/enterprise.png",
     resolution: "16:9 • 1280x720px",
-    title: "QR Code-Based Door Security and Attendance Monitoring System",
+    title: "Enterprise Networking & Routing",
     shortDesc:
-      "A more easy and accessible way of documenting and identifying students coming in or out of a room.",
-    stack: ["Python", "OpenCV", "Supabase", "MySQL"],
-    metrics: "Real-Time Security • Role-Based Access",
-    architecture: [
-      "OpenCV video stream pipeline performing low-latency QR detection, bounding-box validation, and anti-replay timestamp checks.",
-      "Cloud PostgreSQL database hosted on Supabase storing member credentials, schedules, and immutable entry/exit logs.",
-      "GPIO / serial relay trigger signaling physical door strike hardware upon verified database handshake."
-    ]
+      "A network operations project focused on routing, secure access control, and efficient documentation of enterprise connectivity flows.",
+    stack: ["Networking", "Cybersecurity", "Cisco", "OSPF", "VLAN", "ACL", "Subnetting"]
+  },
+  {
+    id: "topology",
+    encounter: "BOSS ENCOUNTER #02",
+    level: "LV 92 TOPOLOGY ENCOUNTER",
+    placeholderPath: "/assets/projects/topology.png",
+    resolution: "16:9 • 1280x720px",
+    title: "Network Topology Design & Simulation",
+    shortDesc:
+      "A network topology design and simulation project that demonstrates the principles of network architecture, connectivity, and performance optimization.",
+    stack: ["Networking", "Cybersecurity", "Cisco", "Trunking", "VLAN", "Subnetting"]
   },
   {
     id: "eoq-inventory",
     encounter: "BOSS ENCOUNTER #02",
     level: "LV 94 OPS ENGINE",
-    placeholderPath: "/assets/projects/eoq-inventory.jpg",
+    placeholderPath: "/assets/projects/eoq.png",
     resolution: "16:9 • 1280x720px",
     title: "Optimization of Supermarket Inventory Management",
     shortDesc:
       "A desktop-based Supermarket Inventory Optimization System that automates EOQ-driven inventory decision-making for supermarket administrators.",
-    stack: ["Python", "Operations Research", "EOQ", "ROP", "MySQL", "Data Modeling"],
-    metrics: "Minimized Total Cost • Automated Reorder Alerts • Stockout Prevention",
-    architecture: [
-      "Computes optimal batch order quantities dynamically using demand rate (D), setup cost (S), and holding cost (H) via EOQ formula.",
-      "Tracks real-time SKU depletion against lead-time demand and safety stock buffers to trigger automated Reorder Point (ROP) alerts.",
-      "Generates actionable restocking schedules for high-turnover supermarket product categories."
-    ]
-  },
-  {
-    id: "arduino-game",
-    encounter: "BOSS ENCOUNTER #03",
-    level: "LV 92 ROBO ENCOUNTER",
-    placeholderPath: "/assets/projects/divide-and-choose.jpg",
-    resolution: "16:9 • 1280x720px",
-    title: "Sison Says!",
-    shortDesc:
-      "legends lang nakakaalam",
-    stack: ["Arduino Uno", "C / C++", "Tinkercad", "Robotics"],
-    metrics: "Game Building • Sensor Logic",
-    architecture: [
-      "Formalizes utility functions for two-player and multi-agent resource partitioning under the classic Divide-and-Choose protocol.",
-      "Analyzes subgame perfect equilibria when players possess heterogeneous preferences vs. asymmetric information.",
-      "Demonstrates practical applications in computational resource allocation and dispute resolution."
-    ]
+    stack: ["Python", "Operations Research", "EOQ", "ROP", "MySQL", "Data Modeling"]
   },
   {
     id: "talaria",
     encounter: "BOSS ENCOUNTER #04",
     level: "LV 95 WEBSYS ENCOUNTER",
-    placeholderPath: "/assets/projects/arduino-sensor-lab.jpg",
+    placeholderPath: "/assets/projects/talaria.png",
     resolution: "16:9 • 1280x720px",
     title: "Talaria Publications Website",
     shortDesc:
-      "legends lang nakakaalam",
+      "First attempt at creating a website for Talaria Publications, the Senior High School student publication at Manila Tytana Colleges",
     stack: ["HTML", "CSS", "JavaScript"],
     metrics: "Basics of HTML • Getting Started with Web Development",
     architecture: [
@@ -295,7 +277,7 @@ const EVENTS_DATA = [
   }
 ];
 
-const Photo = ({ src, alt, fallback, className = "" }) => {
+const Photo = ({ src, alt, fallback, className = "", onOpen }) => {
   const [failed, setFailed] = useState(false);
   return (
     <div className={`relative aspect-video overflow-hidden rounded-lg border border-white/10 bg-zinc-900 ${className}`}>
@@ -304,7 +286,20 @@ const Photo = ({ src, alt, fallback, className = "" }) => {
           {fallback}
         </div>
       ) : (
-        <img src={src} alt={alt} loading="lazy" onError={() => setFailed(true)} className="h-full w-full object-cover" />
+        <button
+          type="button"
+          onClick={() => onOpen({ src, alt })}
+          aria-label={`Enlarge photo: ${alt}`}
+          className="group block h-full w-full cursor-zoom-in focus-visible:outline-2 focus-visible:outline-brand"
+        >
+          <img
+            src={src}
+            alt={alt}
+            loading="lazy"
+            onError={() => setFailed(true)}
+            className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+          />
+        </button>
       )}
     </div>
   );
@@ -324,45 +319,10 @@ export default function App() {
   const [showIntro, setShowIntro] = useState(true);
   const [introExiting, setIntroExiting] = useState(false);
   const [typedLines, setTypedLines] = useState(["", ""]);
-  const [soundEnabled, setSoundEnabled] = useState(true);
   const [activeSection, setActiveSection] = useState("home");
   const [selectedPillarIndex, setSelectedPillarIndex] = useState(0);
   const [savedEvents, setSavedEvents] = useState({});
-  const audioCtxRef = useRef(null);
-
-  const tone = useCallback(
-    (notes, dur, wave, vol) => {
-      if (!soundEnabled) return;
-      try {
-        const Ctx = window.AudioContext || window.webkitAudioContext;
-        if (!Ctx) return;
-        const ctx = (audioCtxRef.current ??= new Ctx());
-        if (ctx.state === "suspended") ctx.resume();
-        const t = ctx.currentTime;
-        const osc = ctx.createOscillator();
-        const gain = ctx.createGain();
-        osc.type = wave;
-        notes.forEach((f, i) => osc.frequency.setValueAtTime(f, t + i * 0.06));
-        gain.gain.setValueAtTime(vol, t);
-        gain.gain.exponentialRampToValueAtTime(0.001, t + dur);
-        osc.connect(gain);
-        gain.connect(ctx.destination);
-        osc.start(t);
-        osc.stop(t + dur);
-      } catch {
-        /* audio unsupported */
-      }
-    },
-    [soundEnabled]
-  );
-  const playBlip = useCallback(
-    (freq = 440, dur = 0.038) => tone([freq + Math.random() * 50 - 25], dur, "square", 0.035),
-    [tone]
-  );
-  const playSaveSound = useCallback(
-    () => tone([523.25, 659.25, 783.99, 1046.5], 0.34, "triangle", 0.06),
-    [tone]
-  );
+  const [lightbox, setLightbox] = useState(null);
 
   useEffect(() => {
     if (!showIntro) return;
@@ -370,7 +330,6 @@ export default function App() {
     setTypedLines(["", ""]);
 
     const leave = () => {
-      playSaveSound();
       setIntroExiting(true);
       timer = setTimeout(() => {
         setShowIntro(false);
@@ -382,7 +341,6 @@ export default function App() {
       if (ch < target.length) {
         const l = line, slice = target.slice(0, ++ch);
         setTypedLines((prev) => prev.map((t, i) => (i === l ? slice : t)));
-        if (target[ch - 1] !== " " && ch % 2 === 1) playBlip(460, 0.032);
         timer = setTimeout(step, 36);
       } else if (line < INTRO_SCRIPT.length - 1) {
         line++;
@@ -394,7 +352,7 @@ export default function App() {
     };
     timer = setTimeout(step, 300);
     return () => clearTimeout(timer);
-  }, [showIntro, playBlip, playSaveSound]);
+  }, [showIntro]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -411,8 +369,19 @@ export default function App() {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!lightbox) return;
+    const onKey = (e) => e.key === "Escape" && setLightbox(null);
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox]);
+
   const scrollToSection = (id) => {
-    playBlip(640, 0.045);
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
   };
 
@@ -446,6 +415,32 @@ export default function App() {
         </div>
       )}
 
+      {lightbox && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label={lightbox.alt}
+          onClick={() => setLightbox(null)}
+          className="fixed inset-0 z-[60] flex cursor-zoom-out flex-col items-center justify-center gap-4 bg-black/90 p-4 backdrop-blur-sm sm:p-8"
+        >
+          <button
+            type="button"
+            onClick={() => setLightbox(null)}
+            aria-label="Close enlarged photo"
+            className="absolute right-4 top-4 rounded-md border border-white/20 bg-zinc-900 px-3 py-1.5 font-mono text-lg text-white transition-colors hover:border-brand sm:right-8 sm:top-8"
+          >
+            ✕
+          </button>
+          <img
+            src={lightbox.src}
+            alt={lightbox.alt}
+            onClick={(e) => e.stopPropagation()}
+            className="max-h-[80vh] max-w-full cursor-default rounded-lg border border-white/10 object-contain"
+          />
+          <p className="px-4 text-center font-tech text-lg text-zinc-200">{lightbox.alt}</p>
+        </div>
+      )}
+
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
           <button onClick={() => scrollToSection("home")} className="group flex shrink-0 items-center gap-2.5">
@@ -462,7 +457,6 @@ export default function App() {
               <button
                 key={id}
                 onClick={() => scrollToSection(id)}
-                onMouseEnter={() => playBlip(520, 0.025)}
                 className={`shrink-0 border-b-2 px-3 py-2 font-tech text-sm transition-colors ${
                   activeSection === id
                     ? "border-brand text-white"
@@ -472,14 +466,6 @@ export default function App() {
                 {label}
               </button>
             ))}
-            <button
-              onClick={() => setSoundEnabled(!soundEnabled)}
-              title="Toggle 8-Bit Sound Effects"
-              aria-label="Toggle sound effects"
-              className="ml-2 shrink-0 rounded-md p-2 text-zinc-400 transition-colors hover:text-brand"
-            >
-              {soundEnabled ? <Volume2 className="h-4 w-4 text-brand" /> : <VolumeX className="h-4 w-4" />}
-            </button>
           </nav>
         </div>
       </header>
@@ -510,9 +496,27 @@ export default function App() {
                 A junior Information Technology student who aspires to build cloud-driven systems and secure network infrastructures that solve real-world operational challenges. My academic coursework and leadership in student tech initiatives have strengthened my ability to adapt quickly to emerging stacks and troubleshoot complex system environments.
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
-                <span className="chip border-brand/60 bg-brand-deep text-white">CLOUD COMPUTING</span>
-                <span className="chip text-ut">COMPUTER NETWORKING</span>
-                <span className="chip">AWS STUDENT BUILDER GROUP - HUGO</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">NETWORKING</span>
+                <span className="chip text-ut">PUTTY</span>
+                <span className="chip">CISCO CLI</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">UBUNTU</span>
+                <span className="chip text-ut">FEDORA</span>
+                <span className="chip">CYBERSECURITY</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">AWS</span>
+                <span className="chip text-ut">KIRO</span>
+                <span className="chip">CLOUD COMPUTING</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">C</span>
+                <span className="chip text-ut">C++</span>
+                <span className="chip">PYTHON</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">ASSEMBLY</span>
+                <span className="chip text-ut">JAVA</span>
+                <span className="chip">HTML</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">CSS</span>
+                <span className="chip text-ut">REACT</span>
+                <span className="chip">MYSQL</span>
+                <span className="chip border-brand/60 bg-brand-deep text-white">ORACLE</span>
+                <span className="chip text-ut">FIGMA</span>
+                <span className="chip">CANVA</span>
               </div>
             </div>
           </div>
@@ -524,20 +528,9 @@ export default function App() {
               className="mx-auto w-full max-w-md select-none object-contain drop-shadow-[0_8px_40px_rgba(233,62,143,0.2)]"
             />
           </div>
-
-          <div className="grid gap-5 sm:grid-cols-3 lg:col-span-12">
-            {CAROUSEL_SLIDES.map((slide) => (
-              <figure key={slide.id} className="card space-y-3 p-3">
-                <Photo src={slide.placeholderPath} alt={slide.title} fallback={slide.label} className="aspect-[3/2]" />
-                <figcaption className="px-1 pb-1 font-mono text-base leading-snug text-zinc-300">
-                  * {slide.subtitle}
-                </figcaption>
-              </figure>
-            ))}
-          </div>
         </section>
 
-        <Section id="how-i-work" code="ACT // 02" title="SPECIALITIES  // BATTLE STRATEGY">
+        <Section id="specialities" code="ACT // 02" title="SPECIALITIES  // BATTLE STRATEGY">
           <div className="grid items-stretch gap-6 lg:grid-cols-12">
             <div className="flex flex-col gap-3 lg:col-span-5">
               {SPECIALITIES_PILLARS.map((pillar, idx) => {
@@ -546,10 +539,7 @@ export default function App() {
                 return (
                   <button
                     key={pillar.id}
-                    onClick={() => {
-                      playBlip(580, 0.04);
-                      setSelectedPillarIndex(idx);
-                    }}
+                    onClick={() => setSelectedPillarIndex(idx)}
                     className={`flex items-center justify-between gap-3 rounded-xl border p-4 text-left transition-colors ${
                       selected ? "border-brand bg-brand-deep/50" : "border-white/10 bg-zinc-950 hover:border-white/30"
                     }`}
@@ -605,11 +595,9 @@ export default function App() {
                   <span className="text-brand">* {p.encounter}</span>
                   <span className="chip">{p.level}</span>
                 </div>
+                <Photo src={p.placeholderPath} alt={p.title} fallback="[ PHOTO NOT FOUND ]" onOpen={setLightbox} />
                 <h3 className="font-tech text-xl leading-snug text-white">{p.title}</h3>
                 <p className="leading-relaxed text-zinc-300">{p.shortDesc}</p>
-                <p className="mt-auto rounded-md border-l-2 border-ut bg-zinc-900/70 px-3 py-2 font-mono text-base text-zinc-200">
-                  * {p.metrics}
-                </p>
                 <div className="flex flex-wrap gap-1.5">
                   {p.stack.map((tech) => (
                     <span key={tech} className="chip border-brand/50 bg-brand-deep text-white">{tech}</span>
@@ -658,10 +646,7 @@ export default function App() {
                 <article key={ev.id} className="card flex flex-col p-5">
                   <div className="mb-4 flex items-center justify-between">
                     <button
-                      onClick={() => {
-                        playSaveSound();
-                        setSavedEvents((prev) => ({ ...prev, [ev.id]: !prev[ev.id] }));
-                      }}
+                      onClick={() => setSavedEvents((prev) => ({ ...prev, [ev.id]: !prev[ev.id] }))}
                       title="Touch SAVE Star"
                       className="group flex items-center gap-2 font-mono text-sm text-brand focus-visible:outline-2 focus-visible:outline-brand"
                     >
@@ -670,7 +655,7 @@ export default function App() {
                     </button>
                     <span className="chip">{ev.date}</span>
                   </div>
-                  <Photo src={ev.placeholderPath} alt={ev.title} fallback={`[ PHOTO NOT FOUND: ${ev.placeholderPath} ]`} className="mb-4" />
+                  <Photo src={ev.placeholderPath} alt={ev.title} fallback={`[ PHOTO NOT FOUND: ${ev.placeholderPath} ]`} className="mb-4" onOpen={setLightbox} />
                   <p className="mb-2 font-mono text-sm text-ut">[{ev.tag}]</p>
                   <h3 className="mb-2 font-tech text-lg leading-snug text-white">{ev.title}</h3>
                   <p className="mb-3 font-dialog text-xl text-brand">Role: {ev.role}</p>
