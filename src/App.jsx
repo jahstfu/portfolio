@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { MapPin, Network, Terminal, Server, ShieldCheck, ClipboardList } from 'lucide-react';
 
 const INTRO_SCRIPT = ["* Hey! I'm Jah!", "* Welcome to my portfolio!"];
@@ -16,42 +16,6 @@ const SoulIcon = ({ className = "h-4 w-4" }) => (
     <path fill="currentColor" d="M2 2h4v2h4V2h4v2h2v5h-2v2h-2v2h-2v2H6v-2H4v-2H2V9H0V4h2V2z" />
   </svg>
 );
-
-const CAROUSEL_SLIDES = [
-  {
-    id: 1,
-    label: "picture 1",
-    placeholderPath: "/assets/bionote/bionote-1.jpg",
-    resolution: "1200x800px",
-    title: "AWS Cloud Club - Hugo GA 2026",
-    subtitle: "Chief Administrative Officer // Flagship Assembly & Ideathon",
-    badge: "CLOUD LEADERSHIP",
-    accent: "#ff0055",
-    illustration: "cloud"
-  },
-  {
-    id: 2,
-    label: "picture 2",
-    placeholderPath: "/assets/bionote/bionote-2.jpg",
-    resolution: "1200x800px",
-    title: "TUP Manila Student Governance",
-    subtitle: "USG Assistant Secretary for Resources & COS Secretariat",
-    badge: "INSTITUTIONAL POLICY",
-    accent: "#00ff00",
-    illustration: "gov"
-  },
-  {
-    id: 3,
-    label: "picture 3",
-    placeholderPath: "/assets/bionote/bionote-3.jpg",
-    resolution: "1200x800px",
-    title: "OpenCV & Embedded Hardware Lab",
-    subtitle: "QR Door Access Security + Arduino Ultrasonic & MOSFET Circuits",
-    badge: "SYSTEMS & IOT",
-    accent: "#b80028",
-    illustration: "hardware"
-  }
-];
 
 const SPECIALITIES_PILLARS = [
   {
@@ -149,7 +113,7 @@ const PROJECTS_DATA = [
   },
   {
     id: "eoq-inventory",
-    encounter: "BOSS ENCOUNTER #02",
+    encounter: "BOSS ENCOUNTER #03",
     level: "LV 94 OPS ENGINE",
     placeholderPath: "/assets/projects/eoq.png",
     resolution: "16:9 • 1280x720px",
@@ -276,6 +240,61 @@ const EVENTS_DATA = [
       "learning the fundamentals of Kubernetes to discovering how it empowers developers in managing modern applications, the session gave us valuable insights into one of today’s most in-demand technologies."
   }
 ];
+
+const SPIDER_SRC = "/assets/background/spider.png";
+
+const SPIDERS = [
+  { dir: "down", pos: "left-2 2xl:left-8" },
+  { dir: "up",   pos: "left-[4.5rem] 2xl:left-32" },
+  { dir: "up",   pos: "right-2 2xl:right-8" },
+  { dir: "down", pos: "right-[4.5rem] 2xl:right-32" }
+];
+
+const SpiderCrawl = () => {
+  const refs = useRef([]);
+
+  useEffect(() => {
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    let frame = null;
+    const update = () => {
+      frame = null;
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const progress = max > 0 ? window.scrollY / max : 0;
+      const track = Math.max(window.innerHeight - 180, 0);
+      SPIDERS.forEach(({ dir }, i) => {
+        const el = refs.current[i];
+        if (!el) return;
+        const wobble = Math.sin(window.scrollY / 45 + i * 1.7) * 7;
+        const y = (dir === "down" ? progress : 1 - progress) * track;
+        el.style.transform = `translateY(${y}px) rotate(${(dir === "down" ? 180 : 0) + wobble}deg)`;
+      });
+    };
+    const onScroll = () => { frame ??= requestAnimationFrame(update); };
+    update();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      if (frame) cancelAnimationFrame(frame);
+    };
+  }, []);
+
+  return (
+    <div aria-hidden="true" className="pointer-events-none fixed inset-0 z-0 hidden overflow-hidden min-[1400px]:block">
+      {SPIDERS.map(({ pos }, i) => (
+        <img
+          key={i}
+          ref={(el) => (refs.current[i] = el)}
+          src={SPIDER_SRC}
+          alt=""
+          draggable={false}
+          className={`absolute top-[72px] w-14 opacity-40 will-change-transform 2xl:w-20 ${pos}`}
+        />
+      ))}
+    </div>
+  );
+};
 
 const Photo = ({ src, alt, fallback, className = "", onOpen }) => {
   const [failed, setFailed] = useState(false);
@@ -441,6 +460,9 @@ export default function App() {
         </div>
       )}
 
+      <SpiderCrawl />
+
+
       <header className="sticky top-0 z-40 border-b border-white/10 bg-black/85 backdrop-blur-md">
         <div className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-4 py-3 sm:px-8">
           <button onClick={() => scrollToSection("home")} className="group flex shrink-0 items-center gap-2.5">
@@ -580,7 +602,7 @@ export default function App() {
                 </ul>
               </div>
               <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/10 pt-4 font-mono text-sm text-zinc-400">
-                <span>STATUS: BATTLE-TESTED IN LABS & STUDENT COUNCILS</span>
+                <span>STATUS: FILLED WITH DETERMINATION, IT REFUSED TO HOLD BACK</span>
                 <span className="text-brand">DETERMINATION: 100%</span>
               </div>
             </div>
