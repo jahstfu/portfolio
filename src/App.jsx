@@ -1,14 +1,16 @@
 import { useState, useEffect, useRef } from 'react';
-import { MapPin, Network, Terminal, Server, ShieldCheck, ClipboardList } from 'lucide-react';
+import { MapPin, Mail, Phone, Link2, Network, Terminal, Server, ShieldCheck, ClipboardList } from 'lucide-react';
 
 const INTRO_SCRIPT = ["* Hey! I'm Jah!", "* Welcome to my portfolio!"];
 
 const NAV_ITEMS = [
   { id: "home", label: "HOME" },
-  { id: "specialities", label: "SPECIALITIES" },
   { id: "projects", label: "PROJECTS" },
+  { id: "specialities", label: "SPECIALITIES" },
   { id: "organizations", label: "ORGS" },
-  { id: "events", label: "EVENTS" }
+  { id: "events", label: "EVENTS" },
+  { id: "contact", label: "CONTACT" },
+  { id: "resume", label: "RESUME"}
 ];
 
 const SoulIcon = ({ className = "h-4 w-4" }) => (
@@ -242,6 +244,12 @@ const EVENTS_DATA = [
 ];
 
 const SPIDER_SRC = "/assets/background/spider.png";
+const RESUME_SRC = "/assets/resume/resume.pdf";
+const CONTACTS = [
+  { label: "LINKEDIN", value: "Justin (Jah) Rayala", href: "https://www.linkedin.com/in/jahrayala/", icon: Link2, external: true },
+  { label: "EMAIL", value: "jrayala.work@gmail.com", href: "mailto:jrayala.work@gmail.com", icon: Mail },
+  { label: "PHONE", value: "+63 921 343 9482", href: "tel:+639213439482", icon: Phone }
+];
 
 const SPIDERS = [
   { dir: "down", pos: "left-2 2xl:left-8" },
@@ -342,6 +350,7 @@ export default function App() {
   const [selectedPillarIndex, setSelectedPillarIndex] = useState(0);
   const [savedEvents, setSavedEvents] = useState({});
   const [lightbox, setLightbox] = useState(null);
+  const [showResume, setShowResume] = useState(false);
 
   useEffect(() => {
     if (!showIntro) return;
@@ -375,13 +384,16 @@ export default function App() {
 
   useEffect(() => {
     const onScroll = () => {
-      for (const { id } of NAV_ITEMS) {
-        const rect = document.getElementById(id)?.getBoundingClientRect();
-        if (rect && rect.top <= 280 && rect.bottom >= 240) {
-          setActiveSection(id);
-          break;
-        }
-      }
+      const sections = NAV_ITEMS
+        .map(({ id }) => ({ id, el: document.getElementById(id) }))
+        .filter(({ el }) => el)
+        .map(({ id, el }) => ({ id, top: el.getBoundingClientRect().top }))
+        .sort((a, b) => a.top - b.top);
+
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 4;
+      const passed = sections.filter((s) => s.top <= 280);
+      const current = atBottom ? sections[sections.length - 1] : passed[passed.length - 1] ?? sections[0];
+      setActiveSection(current.id);
     };
     window.addEventListener("scroll", onScroll, { passive: true });
     onScroll();
@@ -399,6 +411,23 @@ export default function App() {
       document.body.style.overflow = prevOverflow;
     };
   }, [lightbox]);
+
+  useEffect(() => {
+    if (!lightbox && !showResume) return;
+    const onKey = (e) => {
+      if (e.key === "Escape") {
+        setLightbox(null);
+        setShowResume(false);
+      }
+    };
+    const prevOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+    window.addEventListener("keydown", onKey);
+    return () => {
+      window.removeEventListener("keydown", onKey);
+      document.body.style.overflow = prevOverflow;
+    };
+  }, [lightbox, showResume]);
 
   const scrollToSection = (id) => {
     document.getElementById(id)?.scrollIntoView({ behavior: "smooth", block: "start" });
@@ -460,6 +489,47 @@ export default function App() {
         </div>
       )}
 
+      {showResume && (
+        <div
+          role="dialog"
+          aria-modal="true"
+          aria-label="Resume"
+          onClick={() => setShowResume(false)}
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-black/90 p-4 backdrop-blur-sm sm:p-8"
+        >
+          <div
+            onClick={(e) => e.stopPropagation()}
+            className="card flex h-full max-h-[90vh] w-full max-w-4xl flex-col overflow-hidden"
+          >
+            <div className="flex items-center justify-between border-b border-white/10 px-5 py-3">
+              <h2 className="font-tech text-xl text-white">RESUME</h2>
+              <button
+                type="button"
+                onClick={() => setShowResume(false)}
+                aria-label="Close resume"
+                className="rounded-md border border-white/20 bg-zinc-900 px-3 py-1 font-mono text-lg text-white transition-colors hover:border-brand"
+              >
+                ✕
+              </button>
+            </div>
+            <iframe
+              title="Resume"
+              src={`${RESUME_SRC}#toolbar=0&navpanes=0&view=FitH`}
+              className="min-h-0 w-full flex-1 bg-white"
+            />
+            <div className="flex items-center justify-start border-t border-white/10 px-5 py-3">
+              <a
+                href={RESUME_SRC}
+                download
+                className="inline-flex items-center gap-2 rounded-md border border-brand bg-brand-deep px-4 py-2 font-tech text-sm text-white transition-colors hover:bg-brand"
+              >
+                ↓ DOWNLOAD
+              </a>
+            </div>
+          </div>
+        </div>
+      )}
+
       <SpiderCrawl />
 
 
@@ -471,23 +541,27 @@ export default function App() {
               JAH<span className="text-ut">.EXE</span>
             </span>
           </button>
-          <span className="hidden border-l border-white/15 pl-4 font-dialog text-lg text-zinc-400 xl:block">
-            DESPITE EVERYTHING, IT'S STILL YOU.
-          </span>
           <nav className="flex min-w-0 items-center gap-1 overflow-x-auto">
-            {NAV_ITEMS.map(({ id, label }) => (
-              <button
-                key={id}
-                onClick={() => scrollToSection(id)}
-                className={`shrink-0 border-b-2 px-3 py-2 font-tech text-sm transition-colors ${
-                  activeSection === id
-                    ? "border-brand text-white"
-                    : "border-transparent text-zinc-400 hover:text-white"
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+            {NAV_ITEMS.map(({ id, label }) => {
+              const isResume = id === "resume";
+              return (
+                <button
+                  key={id}
+                  onClick={() => (isResume ? setShowResume(true) : scrollToSection(id))}
+                  className={
+                    isResume
+                      ? "ml-2 shrink-0 rounded-md border border-brand px-3 py-1.5 font-tech text-sm text-brand transition-colors hover:bg-brand hover:text-white"
+                      : `shrink-0 border-b-2 px-3 py-2 font-tech text-sm transition-colors ${
+                          activeSection === id
+                            ? "border-brand text-white"
+                            : "border-transparent text-zinc-400 hover:text-white"
+                        }`
+                  }
+                >
+                  {label}
+                </button>
+              );
+            })}
           </nav>
         </div>
       </header>
@@ -512,7 +586,6 @@ export default function App() {
                 <span className="underline decoration-brand decoration-2 underline-offset-4">
                   Technological University of the Philippines (TUP) Manila
                 </span>
-                .
               </p>
               <p className="max-w-prose leading-relaxed text-zinc-300">
                 A junior Information Technology student who aspires to build cloud-driven systems and secure network infrastructures that solve real-world operational challenges. My academic coursework and leadership in student tech initiatives have strengthened my ability to adapt quickly to emerging stacks and troubleshoot complex system environments.
@@ -552,7 +625,28 @@ export default function App() {
           </div>
         </section>
 
-        <Section id="specialities" code="ACT // 02" title="SPECIALITIES  // BATTLE STRATEGY">
+        <Section id="projects" code="FIGHT // 02" title="PROJECTS & TECHNICAL LABS">
+          <div className="grid gap-6 md:grid-cols-2">
+            {PROJECTS_DATA.map((p) => (
+              <article key={p.id} className="card flex flex-col gap-4 p-6">
+                <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3 font-mono text-sm">
+                  <span className="text-brand">* {p.encounter}</span>
+                  <span className="chip">{p.level}</span>
+                </div>
+                <Photo src={p.placeholderPath} alt={p.title} fallback="[ PHOTO NOT FOUND ]" onOpen={setLightbox} />
+                <h3 className="font-tech text-xl leading-snug text-white">{p.title}</h3>
+                <p className="leading-relaxed text-zinc-300">{p.shortDesc}</p>
+                <div className="flex flex-wrap gap-1.5">
+                  {p.stack.map((tech) => (
+                    <span key={tech} className="chip border-brand/50 bg-brand-deep text-white">{tech}</span>
+                  ))}
+                </div>
+              </article>
+            ))}
+          </div>
+        </Section>
+
+        <Section id="specialities" code="ACT // 03" title="SPECIALITIES  // BATTLE STRATEGY">
           <div className="grid items-stretch gap-6 lg:grid-cols-12">
             <div className="flex flex-col gap-3 lg:col-span-5">
               {SPECIALITIES_PILLARS.map((pillar, idx) => {
@@ -606,27 +700,6 @@ export default function App() {
                 <span className="text-brand">DETERMINATION: 100%</span>
               </div>
             </div>
-          </div>
-        </Section>
-
-        <Section id="projects" code="FIGHT // 03" title="PROJECTS & TECHNICAL LABS">
-          <div className="grid gap-6 md:grid-cols-2">
-            {PROJECTS_DATA.map((p) => (
-              <article key={p.id} className="card flex flex-col gap-4 p-6">
-                <div className="flex items-center justify-between gap-3 border-b border-white/10 pb-3 font-mono text-sm">
-                  <span className="text-brand">* {p.encounter}</span>
-                  <span className="chip">{p.level}</span>
-                </div>
-                <Photo src={p.placeholderPath} alt={p.title} fallback="[ PHOTO NOT FOUND ]" onOpen={setLightbox} />
-                <h3 className="font-tech text-xl leading-snug text-white">{p.title}</h3>
-                <p className="leading-relaxed text-zinc-300">{p.shortDesc}</p>
-                <div className="flex flex-wrap gap-1.5">
-                  {p.stack.map((tech) => (
-                    <span key={tech} className="chip border-brand/50 bg-brand-deep text-white">{tech}</span>
-                  ))}
-                </div>
-              </article>
-            ))}
           </div>
         </Section>
 
@@ -694,6 +767,27 @@ export default function App() {
             })}
           </div>
         </Section>
+
+        <Section id="contact" code="TALK // 06" title="CONTACT">
+          <div className="grid gap-6 md:grid-cols-3">
+            {CONTACTS.map(({ label, value, href, icon: Icon, external }) => (
+              <a
+                key={label}
+                href={href}
+                {...(external && { target: "_blank", rel: "noopener noreferrer" })}
+                className="card group flex items-center gap-4 p-5 focus-visible:outline-2 focus-visible:outline-brand"
+              >
+                <span className="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-brand/50 bg-brand-deep">
+                  <Icon className="h-5 w-5 text-brand" />
+                </span>
+                <span className="min-w-0">
+                  <span className="block font-mono text-sm text-ut">* {label}</span>
+                  <span className="block break-all font-tech text-base text-white group-hover:underline">{value}</span>
+                </span>
+              </a>
+            ))}
+          </div>
+        </Section>
       </main>
 
       <footer className="border-t border-white/10 bg-black px-4 py-8">
@@ -703,7 +797,7 @@ export default function App() {
             <span className="font-tech text-base text-zinc-300">JAH</span>
           </div>
           <div className="font-dialog text-xl text-zinc-400">
-            * Filled with <span className="text-ut">KINDNESS</span>
+            * Despite everything, it's still you.
           </div>
         </div>
       </footer>
