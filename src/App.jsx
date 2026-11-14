@@ -133,13 +133,7 @@ const PROJECTS_DATA = [
     title: "Talaria Publications Website",
     shortDesc:
       "First attempt at creating a website for Talaria Publications, the Senior High School student publication at Manila Tytana Colleges",
-    stack: ["HTML", "CSS", "JavaScript"],
-    metrics: "Basics of HTML • Getting Started with Web Development",
-    architecture: [
-      "Non-blocking distance telemetry using HC-SR04 ultrasonic transducers for proximity-triggered automation.",
-      "Analog voltage divider networks with Light Dependent Resistors (LDR) for hysteresis-stabilized threshold switching.",
-      "Logic-level N-channel MOSFET driver stages isolating the 5V microcontroller pins from higher-current DC loads."
-    ]
+    stack: ["HTML", "CSS", "JavaScript"]
   }
 ];
 
@@ -551,7 +545,7 @@ export default function App() {
           <div className="space-y-6 lg:col-span-7">
             <div>
               <h1 className="relative font-title text-6xl leading-none text-brand sm:text-8xl">
-                <span aria-hidden="true" className="absolute inset-0 select-none font-title-back text-white">Justin Rayala</span>
+                <span aria-hidden="true" className="absolute inset-0 select-none font-title text-white">Justin Rayala</span>
                 <span className="relative">Justin Rayala</span>
               </h1>
               <p className="mt-4 font-dialog text-4xl text-ut sm:text-5xl">Jah</p>
@@ -561,12 +555,9 @@ export default function App() {
               <p className="font-mono text-base text-ut">* BIONOTE | LV 19</p>
               <p className="font-dialog text-2xl leading-snug text-white sm:text-3xl">
                 <span className="text-brand">* </span>
-                Hey! I’m <span className="text-ut">Jah</span>—a Bachelor of Science in Information Technology (<span className="text-brand">BSIT</span>) student at the{" "}
-                <span className="underline decoration-brand decoration-2 underline-offset-4">
-                  Technological University of the Philippines (TUP) Manila
-                </span>
+                Hey! I’m <span className="text-ut">Jah</span>—a Bachelor of Science in Information Technology (<span className="text-brand">BSIT</span>) student at the Technological University of the Philippines (TUP) Manila
               </p>
-              <p className="max-w-prose leading-relaxed text-zinc-300">
+              <p className="max-w-prose leading-relaxed font-dialog text-zinc-300">
                 A junior Information Technology student who aspires to build cloud-driven systems and secure network infrastructures that solve real-world operational challenges. My academic coursework and leadership in student tech initiatives have strengthened my ability to adapt quickly to emerging stacks and troubleshoot complex system environments.
               </p>
               <div className="flex flex-wrap gap-2 pt-1">
